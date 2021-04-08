@@ -3,7 +3,7 @@ import { mergeSort } from "../../sortingAlgo";
 
 export const inputArraySlice = createSlice({
   name: "inputArray",
-  initialState: { value: ["344", "567", "452", "888", "999"] },
+  initialState: { value: ["888", "567", "452", "344", "759"] },
   reducers: {
     setInputArray: (state, action) => {
       state.value = [...state.value, action.payload];
@@ -11,13 +11,17 @@ export const inputArraySlice = createSlice({
     deleteValue: (state, action) => {
       state.value.splice(action.payload, 1);
     },
-    merge: async (state, action) => {
-      state.value = await mergeSort(state.value);
+    setNewArray: (state, action) => {
+      state.value = action.payload;
     },
   },
 });
 
-export const { setInputArray, deleteValue, merge } = inputArraySlice.actions;
+export const {
+  setInputArray,
+  deleteValue,
+  setNewArray,
+} = inputArraySlice.actions;
 export const inputArrayState = (state) => state.inputArray;
 
 export default inputArraySlice.reducer;

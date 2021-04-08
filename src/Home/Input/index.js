@@ -93,15 +93,6 @@ const Input = ({ entered, setEntered, values, setValues, setValid, valid }) => {
           inputComponent: NumberFormatCustom,
         }}
       />
-
-      <Button
-        variant="contained"
-        onClick={() => {
-          dispatch(merge());
-        }}
-      >
-        Start Sorting
-      </Button>
     </Box>
   );
 };

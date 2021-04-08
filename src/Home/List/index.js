@@ -51,26 +51,27 @@ renderRow.propTypes = {
 
 const ListComponent = () => {
   const classes = useStyles();
-  const inputArray = useSelector(inputArrayState);
+  const inputArray = useSelector(inputArrayState).value;
   const dispatch = useDispatch();
   return (
     <List className={classes.root} subheader={<li />}>
-      {inputArray.value.map((item, i) => (
-        <ListItem key={i}>
-          <ListItemText primary={item} />
-          <ListItemSecondaryAction>
-            <IconButton
-              edge="end"
-              aria-label="delete"
-              onClick={() => {
-                dispatch(deleteValue(i));
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </ListItemSecondaryAction>
-        </ListItem>
-      ))}
+      {inputArray &&
+        inputArray.map((item, i) => (
+          <ListItem key={i}>
+            <ListItemText primary={item} />
+            <ListItemSecondaryAction>
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => {
+                  dispatch(deleteValue(i));
+                }}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+        ))}
     </List>
   );
 };
