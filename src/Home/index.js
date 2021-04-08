@@ -18,7 +18,7 @@ const Home = () => {
 
   useEffect(() => {
     if (entered) {
-      if (arrayInput.value.length >= 5) {
+      if (arrayInput.value.length >= 10) {
         setValid(false);
         dispatch(setMessageState("Delete something"));
       } else {
