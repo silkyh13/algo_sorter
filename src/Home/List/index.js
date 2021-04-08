@@ -10,6 +10,12 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import { FixedSizeList } from "react-window";
 import { makeStyles } from "@material-ui/core/styles";
 import PropTypes from "prop-types";
+import {
+  setInputArray,
+  inputArrayState,
+  deleteValue,
+} from "../../state/slices/inputArray";
+import { useSelector, useDispatch } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,18 +49,13 @@ renderRow.propTypes = {
   style: PropTypes.object.isRequired,
 };
 
-const ListComponent = ({ values, setValues, entered }) => {
+const ListComponent = () => {
   const classes = useStyles();
-  const [arrayInput, setArrayInput] = useState([]);
-
-  useEffect(() => {
-    if (entered) {
-      setArrayInput([...arrayInput, values]);
-    }
-  }, [entered]);
+  const inputArray = useSelector(inputArrayState);
+  const dispatch = useDispatch();
   return (
     <List className={classes.root} subheader={<li />}>
-      {arrayInput.map((item, i) => (
+      {inputArray.value.map((item, i) => (
         <ListItem key={i}>
           <ListItemText primary={item} />
           <ListItemSecondaryAction>
@@ -62,8 +63,7 @@ const ListComponent = ({ values, setValues, entered }) => {
               edge="end"
               aria-label="delete"
               onClick={() => {
-                arrayInput.splice(i, 1);
-                setArrayInput([...arrayInput]);
+                dispatch(deleteValue(i));
               }}
             >
               <DeleteIcon />

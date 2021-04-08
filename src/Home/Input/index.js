@@ -3,6 +3,13 @@ import { Grid, TextField, Button, Box } from "@material-ui/core";
 import NumberFormat from "react-number-format";
 import PropTypes from "prop-types";
 import { makeStyles } from "@material-ui/core/styles";
+import { setMessageState, stateOfMessage } from "../../state/slices/message";
+import {
+  setInputArray,
+  inputArrayState,
+  merge,
+} from "../../state/slices/inputArray";
+import { useSelector, useDispatch } from "react-redux";
 
 function NumberFormatCustom(props) {
   const { inputRef, onChange, ...other } = props;
@@ -37,9 +44,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Input = ({ entered, setEntered, values, setValues }) => {
+const Input = ({ entered, setEntered, values, setValues, setValid, valid }) => {
+  const messageState = useSelector(stateOfMessage);
+  const dispatch = useDispatch();
   const classes = useStyles();
-
   const handleChange = (event) => {
     setValues(event.target.value);
   };
@@ -49,9 +57,20 @@ const Input = ({ entered, setEntered, values, setValues }) => {
 
     const listener = (event) => {
       if (event.code === "Enter" || event.code === "NumpadEnter") {
-        setValues(event.target.value);
-        setEntered(true);
-        setValues("");
+        let stringNumber = event.target.value.split(",").join("");
+        if (stringNumber === "") {
+        } else if (stringNumber > 1000) {
+          setValid(false);
+          dispatch(
+            setMessageState("Enter a number less than or equal to 1,000")
+          );
+        } else if (stringNumber < 1000) {
+          dispatch(setMessageState("Type number and hit enter"));
+          setValid(true);
+          setValues(event.target.value);
+          setEntered(true);
+          setValues("");
+        }
       } else {
         setEntered(false);
       }
@@ -63,8 +82,9 @@ const Input = ({ entered, setEntered, values, setValues }) => {
   return (
     <Box display="flex" justifyContent="space-between" width="500px" mb={3}>
       <TextField
+        error={valid === false ? true : false}
         className={classes.textField}
-        label="Type number and hit enter"
+        label={messageState.value}
         value={values}
         onChange={handleChange}
         name="numberformat"
@@ -74,7 +94,12 @@ const Input = ({ entered, setEntered, values, setValues }) => {
         }}
       />
 
-      <Button variant="contained" onClick={() => {}}>
+      <Button
+        variant="contained"
+        onClick={() => {
+          dispatch(merge());
+        }}
+      >
         Start Sorting
       </Button>
     </Box>
